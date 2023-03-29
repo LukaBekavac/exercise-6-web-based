@@ -1,5 +1,15 @@
 // personal assistant agent
 
+
+// Beliefs of the agent
+prefer_wakeup_with_art(2).
+prefer_wakeup_with_nat(1).
+
+//inference rules
+best_option("artificial"):- prefer_wakeup_with_art(Art) & prefer_wakeup_with_nat(Nat) & Art < Nat.
+best_option("natural"):- prefer_wakeup_with_art(Art) & prefer_wakeup_with_nat(Nat) & Art > Nat.
+
+
 /* Initial goals */ 
 
 // The agent has the goal to start
@@ -15,14 +25,36 @@
 +!start : true <-
     .print("Hello world");
     !createDweetArtifact;
-    postDweet.
+    postDweet;
+    .wait(5000);
+    !greetUser.
 
 @create_and_use_plan
 +!createDweetArtifact : true <-
 makeArtifact("Dweet","room.DweetArtifact",[],ID);
 .print("created artifact").
 
-@listen_to_events
+@greet_user_plan_awake
++!greetUser :  upcoming_event("now") & owner_state("awake") <-
+    .print("Enjoy your Event!").
+
+@greet_user_plan_asleep
++!greetUser :  upcoming_event("now") & owner_state("asleep") <-
+    .print("Starting wake-up routine!");
+    !wake_up_routine.
+
+@waking_user_up_natural
++!wake_up_routine : best_option("natural") <-
+    .print("raising blinds");
+    !raise_blinds;
+    !greetUser.
+
+@waking_user_up_artificial
++!wake_up_routine : best_option("natural") <-
+    .print("turning on lights");
+    !turn_on_lights;
+    !greetUser.
+
 
 
 /* Import behavior of agents that work in CArtAgO environments */

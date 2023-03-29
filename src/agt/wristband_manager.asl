@@ -43,6 +43,7 @@ owner_state(_).
     .nth(0,OwnerStateLst,OwnerState); // performs an action that unifies OwnerState with the element of the list OwnerStateLst at index 0
     -+owner_state(OwnerState); // updates the beleif owner_state 
     .wait(5000);
+    .send(personal_assistant, tell, owner_state(OwnerState));
     !read_owner_state. // creates the goal !read_owner_state
 
 /* 
@@ -52,8 +53,8 @@ owner_state(_).
  * Body: announces the current state of the owner
 */
 @owner_state_plan
-+owner_state(State) : true <-
-    .print("The owner is ", State).
++owner_state(OwnerState) : true <-
+    .print("The owner is ", OwnerState).
 
 /* Import behavior of agents that work in CArtAgO environments */
 { include("$jacamoJar/templates/common-cartago.asl") }

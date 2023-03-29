@@ -29,7 +29,7 @@ makeArtifact("blinds", "org.hyperagents.jacamo.artifacts.wot.ThingArtifact", [Ur
     invokeAction("https://was-course.interactions.ics.unisg.ch/wake-up-ontology#SetState",  ["https://www.w3.org/2019/wot/json-schema#StringSchema"], [State])[ArtId];
     -+blinds(State);
     .print("Set blinds to state ", State);
-    .send(personal_assistant, tell, blinds).
+    .send(personal_assistant, tell, blinds(State)).
 
 
 /*

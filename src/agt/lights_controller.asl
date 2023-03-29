@@ -25,37 +25,37 @@ lights("off").
 makeArtifact("lights", "org.hyperagents.jacamo.artifacts.wot.ThingArtifact", [Url], ArtId).
 
 @set_lights_state
-+!set_blinds_state(State) : true <-
++!set_lights_state(State) : true <-
     invokeAction("https://was-course.interactions.ics.unisg.ch/wake-up-ontology#SetState",  ["https://www.w3.org/2019/wot/json-schema#StringSchema"], [State])[ArtId];
     -+lights(State);
     .print("Set lights to state ", State);
-    .send(personal_assistant, tell, lights).
+    .send(personal_assistant, tell, lights(State)).
 
 /*
  * Plan for turning-on the lights
  * Triggering event: addition of goal !turn_on_lights
- * Context: the agent believes that the blinds are currently lowered
- * Body: sets the state of the blinds to "raised" using the "was:SetState" action affordance
+ * Context: the agent believes that the lights are currently lowered
+ * Body: sets the state of the lights to "raised" using the "was:SetState" action affordance
 */
 @turn_on_lights_plan
 +!turn_on_lights: lights("off") <-
- blinds("on");
+ lights("on");
     .print("lights have been turned on").
 
 /*
- * Plan for lowering the blinds
- * Triggering event: addition of goal !lower_blinds
- * Context: the agent believes that the blinds are currently raised
- * Body: sets the state of the blinds to "lowered" using the "was:SetState" action affordance
+ * Plan for lowering the lights
+ * Triggering event: addition of goal !lower_lights
+ * Context: the agent believes that the lights are currently raised
+ * Body: sets the state of the lights to "lowered" using the "was:SetState" action affordance
 */
 @turn_off_lights_plan
-+!lower_blinds : lights("on") <-
-  blinds("off");
++!lower_lights : lights("on") <-
+  lights("off");
     .print("lights have been turned off").
 
 @lights_plan
 +lights(State) : true <-
-    .print("The blinds are in state ", State).
+    .print("The lights are in state ", State).
 
 
 

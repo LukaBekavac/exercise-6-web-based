@@ -23,7 +23,7 @@ td("https://was-course.interactions.ics.unisg.ch/wake-up-ontology#CalendarServic
 +!start : td("https://was-course.interactions.ics.unisg.ch/wake-up-ontology#CalendarService", Url) <- .print("Calendar ready");
 // performs an action that creates a new artifact of type ThingArtifact, named "calendar" using the WoT TD located at Url
 // the action unifies ArtId with the ID of the artifact in the workspace
-makeArtifact("calendar", "org.hyperagents.jacamo.artifacts.wot.ThingArtifact", [Url], ArtId);
+makeArtifact("upcoming_event", "org.hyperagents.jacamo.artifacts.wot.ThingArtifact", [Url], ArtId);
 !read_upcoming_event. // creates the goal !read_upcoming_event
 /*
 
@@ -43,8 +43,8 @@ readProperty("https://was-course.interactions.ics.unisg.ch/wake-up-ontology#Read
 .nth(0,EventLst,Event); // performs an action that unifies Event with the element of the list EventLst at index 0
 -+upcoming_event(Event); // updates the belief upcoming_event
 .wait(5000); // waits for 5 seconds
+.send(personal_assistant, tell, upcoming_event(Event));
 !read_upcoming_event. // creates the goal !read_upcoming_event
-.send(personal_assistant, tell, upcoming_event).
 
 /*
     Plan for reacting to the addition of the belief !upcoming_event
