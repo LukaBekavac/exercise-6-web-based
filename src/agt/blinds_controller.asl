@@ -21,8 +21,42 @@ blinds("lowered").
  * Body: greets the user
 */
 @start_plan
-+!start : td("https://was-course.interactions.ics.unisg.ch/wake-up-ontology#Blinds", Url) <-
-    .print("Hello world").
++!start : td("https://was-course.interactions.ics.unisg.ch/wake-up-ontology#Blinds", Url) <- .print("blinds ready");
+makeArtifact("blinds", "org.hyperagents.jacamo.artifacts.wot.ThingArtifact", [Url], ArtId).
+
+@set_blinds_state
++!set_blinds_state(State) : true <-
+    invokeAction("https://was-course.interactions.ics.unisg.ch/wake-up-ontology#SetState",  ["https://www.w3.org/2019/wot/json-schema#StringSchema"], [State])[ArtId];
+    -+blinds(State);
+    .print("Set blinds to state ", State);
+    .send(personal_assistant, tell, blinds).
+
+
+/*
+ * Plan for raising the blinds
+ * Triggering event: addition of goal !raise_blinds
+ * Context: the agent believes that the blinds are currently lowered
+ * Body: sets the state of the blinds to "raised" using the "was:SetState" action affordance
+*/
+@raise_blinds_plan
++!raise_blinds : blinds("lowered") <-
+ blinds("raised");
+    .print("Blinds have been raised").
+
+/*
+ * Plan for lowering the blinds
+ * Triggering event: addition of goal !lower_blinds
+ * Context: the agent believes that the blinds are currently raised
+ * Body: sets the state of the blinds to "lowered" using the "was:SetState" action affordance
+*/
+@lower_blinds_plan
++!lower_blinds : blinds("raised") <-
+  blinds("lowered");
+    .print("Blinds have been lowered").
+
+@blinds_plan
++blinds(State) : true <-
+    .print("The blinds are in state ", State).
 
 /* Import behavior of agents that work in CArtAgO environments */
 { include("$jacamoJar/templates/common-cartago.asl") }
