@@ -26,10 +26,10 @@ best_option("natural"):- prefer_wakeup_with_art(Art) & prefer_wakeup_with_nat(Na
     .print("Hello world");
     !createDweetArtifact;
     postDweet;
-    .wait(5000);
+    .wait(8000);
     !greetUser.
 
-@create_and_use_plan
+@create_and_use_dweet
 +!createDweetArtifact : true <-
 makeArtifact("Dweet","room.DweetArtifact",[],ID);
 .print("created artifact").
@@ -41,19 +41,10 @@ makeArtifact("Dweet","room.DweetArtifact",[],ID);
 @greet_user_plan_asleep
 +!greetUser :  upcoming_event("now") & owner_state("asleep") <-
     .print("Starting wake-up routine!");
-    !wake_up_routine.
+    .broadcast(askAll, wake_method, Method);
+    !use_Method(Method);
+    .print("Using following to wake the user", Method).
 
-@waking_user_up_natural
-+!wake_up_routine : best_option("natural") <-
-    .print("raising blinds");
-    !raise_blinds;
-    !greetUser.
-
-@waking_user_up_artificial
-+!wake_up_routine : best_option("natural") <-
-    .print("turning on lights");
-    !turn_on_lights;
-    !greetUser.
 
 
 

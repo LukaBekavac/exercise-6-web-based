@@ -57,7 +57,9 @@ makeArtifact("lights", "org.hyperagents.jacamo.artifacts.wot.ThingArtifact", [Ur
 +lights(State) : true <-
     .print("The lights are in state ", State).
 
-
+@reacting_to_calls
++!wake_method : lights("off") <-
+    .send(personal_assistant, tell, wake_method("lights")).
 
 
 
